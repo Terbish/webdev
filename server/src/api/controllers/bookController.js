@@ -14,7 +14,7 @@ export const listBooks = (req, res) => {
 }
 
 export const getBookByAuthor = (req, res) => {
-    const name = req.params.name;
+    const name = req.params.authorName;
     const author = findAuthorByName(name);
     console.log(author);
     if (!author) {
@@ -25,8 +25,7 @@ export const getBookByAuthor = (req, res) => {
         res.json(booksByAuthor);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'baaaad' });
-        res.status(404).json({ error: 'Books not found' });
+        res.status(500).json({ error: 'An error occurred while fetching the books' });
     }
 }
 

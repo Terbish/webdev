@@ -34,7 +34,7 @@ describe("Book Routes", () => {
         const author = authors[0];
         console.log(author.fullName, author.id);
         console.log(books.filter((b) => b.primaryAuthorId === author.id));
-        const response = await request(app).get(`/books/author/${author.fullName}`).expect(200);
+        const response = await request(app).get(`/books/author/Charles%20Dickens`).expect(200);
         const booksByAuthor = books.filter((b) => b.primaryAuthorId === author.id);
         expect(response.body).to.eql(booksByAuthor);
     });
