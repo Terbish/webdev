@@ -5,7 +5,7 @@ const router = Router();
 
 router.post('/', addBook);
 router.get('/', listBooks);
-router.get('/author/:name', getBookByAuthor);
+router.get('/author/:authorName', getBookByAuthor);
 // router.put('/:id', updateBook);
 // router.delete('/:id', removeBook);
 
