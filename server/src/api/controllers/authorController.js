@@ -2,9 +2,8 @@
 let authors = [];
 
 export const addAuthor = (req, res) => {
-  const { fullName, bio, birthDate, primaryGenre } = req.body;
-  const newAuthor = { fullName, bio, birthDate, primaryGenre };
-  newAuthor.id = authors.length + 1;
+  const { fullName, bio, birthDate, primaryGenre } = {...req.body, ...req.query};
+  const newAuthor = { fullName, bio, birthDate, primaryGenre, id: authors.length + 1};
   authors.push(newAuthor);
   res.status(201).json(newAuthor);
 };

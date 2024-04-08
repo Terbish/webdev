@@ -10,7 +10,9 @@ export const addBook = (req, res) => {
 }
 
 export const listBooks = (req, res) => {
-    res.json(books);
+    // return the title only for each book
+    const titles = books.map((b) => b.title);
+    res.json(titles);
 }
 
 export const getBookByAuthor = (req, res) => {
@@ -29,8 +31,25 @@ export const getBookByAuthor = (req, res) => {
     }
 }
 
+export const getBookByTag = (req, res) => {
+    const tag = req.params.tag;
+    const booksByTag = books.filter((b) => b.tags.includes(tag));
+    res.json(booksByTag);
+}
+
+export const getBookById = (req, res) => {
+    const id = req.params.id;
+    const book = books.find((b) => b.id === parseInt(id));
+    if (!book) {
+        return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json(book);
+}
+
 export default {
     addBook,
     listBooks,
     getBookByAuthor,
+    getBookByTag, 
+    getBookById,
 }

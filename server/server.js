@@ -13,6 +13,6 @@ app.listen(port, () => {
 });
 
 app.use('/authors', authorRoutes);
-app.use("/books", bookRoutes);
+app.use('/books', bookRoutes);
 
 export default app;
