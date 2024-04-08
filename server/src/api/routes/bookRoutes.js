@@ -16,7 +16,7 @@ router.post('/', addBook);
 router.get('/', listBooks);
 router.get('/author/:authorName', getBookByAuthor);
 router.get('/tags/:tag', getBookByTag);
-router.get('/:id', getBookById);
+router.get('/id/:id', getBookById);
 // router.put('/:id', updateBook);
 // router.delete('/:id', removeBook);
 

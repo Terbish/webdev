@@ -4,7 +4,7 @@ let books = [];
 
 export const addBook = (req, res) => {
     const { title, subtitle, publicationDate, tags, primaryAuthorId } = req.body;
-    const newBook = { title, subtitle, publicationDate, tags, primaryAuthorId };
+    const newBook = { title, subtitle, publicationDate, tags, primaryAuthorId, id: books.length + 1};
     books.push(newBook);
     res.status(201).json(newBook);
 }
@@ -32,8 +32,11 @@ export const getBookByAuthor = (req, res) => {
 }
 
 export const getBookByTag = (req, res) => {
-    const tag = req.params.tag;
-    const booksByTag = books.filter((b) => b.tags.includes(tag));
+    const tag = req.params.tag.split('%20');
+    if(!tag) {
+        return res.status(400).json({ error: 'Please provide a tag' });
+    }
+    const booksByTag = books.filter((b) => tag.every((t) => b.tags.includes(t)));
     res.json(booksByTag);
 }
 
