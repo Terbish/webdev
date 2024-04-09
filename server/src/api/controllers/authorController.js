@@ -2,7 +2,7 @@
 let authors = [];
 
 export const addAuthor = (req, res) => {
-  const { fullName, bio, birthDate, primaryGenre } = {...req.body, ...req.query};
+  const { fullName, bio, birthDate, primaryGenre } = req.body;
   const newAuthor = { fullName, bio, birthDate, primaryGenre, id: authors.length + 1};
   authors.push(newAuthor);
   res.status(201).json(newAuthor);
@@ -13,8 +13,7 @@ export const listAuthors = (req, res) => {
 };
 
 export const updateAuthorBio = (req, res) => {
-  const id = req.params.id;
-  const { bio } = req.body;
+  const { id, bio } = req.body;
   const author = authors.find((a) => a.id === parseInt(id));
   if (!author) {
     return res.status(404).json({ error: 'Author not found' });
@@ -24,8 +23,8 @@ export const updateAuthorBio = (req, res) => {
 };
 
 export const getAuthorByName = (req, res) => {
-  const name = req.params.name;
-  const author= authors.find((a) => a.fullName === name);
+  const { authorName } = req.body;
+  const author = authors.find((a) => a.fullName === authorName);
   if (!author) {
     return res.status(404).json({ error: 'Author not found' });
   }

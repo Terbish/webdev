@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addBook, listBooks, getBookByAuthor, getBookByTag, getBookById} from "../controllers/bookController.js"; 
+import { addBook, listBooks, getBookByAuthor, getBookByTag, getBookById, updateBook} from "../controllers/bookController.js"; 
 
 const router = Router();
 
@@ -14,10 +14,10 @@ Update any of the attributes of a specific book
 
 router.post('/', addBook);
 router.get('/', listBooks);
-router.get('/author/:authorName', getBookByAuthor);
-router.get('/tags/:tag', getBookByTag);
-router.get('/id/:id', getBookById);
-// router.put('/:id', updateBook);
+router.get('/authorName', getBookByAuthor);
+router.get('/tags', getBookByTag);
+router.get('/id', getBookById);
+router.put('/id', updateBook);
 // router.delete('/:id', removeBook);
 
 export default router;

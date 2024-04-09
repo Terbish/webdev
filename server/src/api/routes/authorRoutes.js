@@ -4,7 +4,7 @@ import { addAuthor, listAuthors, updateAuthorBio, getAuthorByName } from '../con
 
 router.post('/', addAuthor);
 router.get('/', listAuthors);
-router.put('/:id/bio', updateAuthorBio);
-router.get('/:name', getAuthorByName);
+router.put('/bio', updateAuthorBio);
+router.get('/name', getAuthorByName);
 
 export default router;
