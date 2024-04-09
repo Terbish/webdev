@@ -3,7 +3,7 @@ let authors = [];
 
 export const addAuthor = (req, res) => {
   const { fullName, bio, birthDate, primaryGenre } = req.body;
-  const newAuthor = { fullName, bio, birthDate, primaryGenre, id: authors.length + 1};
+  const newAuthor = { fullName, bio, birthDate, primaryGenre, authorId: authors.length + 1};
   authors.push(newAuthor);
   res.status(201).json(newAuthor);
 };
@@ -14,7 +14,7 @@ export const listAuthors = (req, res) => {
 
 export const updateAuthorBio = (req, res) => {
   const { id, bio } = req.body;
-  const author = authors.find((a) => a.id === parseInt(id));
+  const author = authors.find((a) => a.authorId === parseInt(id));
   if (!author) {
     return res.status(404).json({ error: 'Author not found' });
   }

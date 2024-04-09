@@ -4,7 +4,7 @@ let books = [];
 
 export const addBook = (req, res) => {
     const { title, subtitle, publicationDate, tags, primaryAuthorId } = req.body;
-    const newBook = { title, subtitle, publicationDate, tags, primaryAuthorId, id: books.length + 1 };
+    const newBook = { title, subtitle, publicationDate, tags, primaryAuthorId, bookId: books.length + 1 };
     books.push(newBook);
     res.status(201).json(newBook);
 }
@@ -22,7 +22,7 @@ export const getBookByAuthor = (req, res) => {
         return res.status(404).json({ error: 'Author not found' });
     }
     try {
-        const booksByAuthor = books.filter((b) => b.primaryAuthorId === name.id);
+        const booksByAuthor = books.filter((b) => b.primaryAuthorId === name.authorId);
         res.json(booksByAuthor);
     } catch (error) {
         console.log(error);
@@ -83,8 +83,8 @@ export const removeBook = (req, res) => {
     res.json(book);
 }
 
-function findBookById(id) {
-    return books.find((b) => b.id === parseInt(id));
+export function findBookById(id) {
+    return books.find((b) => b.bookId === parseInt(id));
 }
 
 function updateBookProperties(book, updates) {
