@@ -31,7 +31,7 @@ export const getBookByAuthor = (req, res) => {
 }
 
 export const getBookByTag = (req, res) => {
-    const {tags} = req.body;
+    const { tags } = req.body;
     console.log(tags);
     if (tags.length === 0) {
         return res.status(400).json({ error: 'No tags provided' });
@@ -46,8 +46,8 @@ export const getBookByTag = (req, res) => {
 }
 
 export const getBookById = (req, res) => {
-    const {id} = req.body;
-    const book = books.find((b) => b.id === parseInt(id));
+    const { id } = req.body;
+    const book = findBookById(id);
     if (!book) {
         return res.status(404).json({ error: 'Book not found' });
     }
@@ -55,31 +55,47 @@ export const getBookById = (req, res) => {
 }
 
 export const updateBook = (req, res) => {
-    const { newTitle, newSubtitle, newPublicationDate, newTags, newPrimaryAuthorId, id } = req.body;
-    const book = books.find((b) => b.id === parseInt(id));
+    const { id, newTitle, newSubtitle, newPublicationDate, newTags, newPrimaryAuthorId } = req.body;
+    const book = findBookById(id);
+  
     if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
+      return res.status(404).json({ error: 'Book not found' });
     }
-    switch (Object.keys(req.body)[0]) {
-        case newTitle:
-            book.title = newTitle;
-            break;
-        case newSubtitle:
-            book.subtitle = newSubtitle;
-            break;
-        case newPublicationDate:
-            book.publicationDate = newPublicationDate;
-            break;
-        case newTags:
-            book.tags = newTags;
-            break;
-        case newPrimaryAuthorId:
-            book.primaryAuthorId = newPrimaryAuthorId;
-            break;
-        default:
-            return res.status(400).json({ error: 'Invalid field to update' });
+  
+    const updatedBook = updateBookProperties(book, {
+      newTitle,
+      newSubtitle,
+      newPublicationDate,
+      newTags,
+      newPrimaryAuthorId,
+    });
+    res.json(updatedBook);
+  };
+
+function findBookById(id) {
+    return books.find((b) => b.id === parseInt(id));
+}
+
+function updateBookProperties(book, updates) {
+    const { newTitle, newSubtitle, newPublicationDate, newTags, newPrimaryAuthorId } = updates;
+
+    if (newTitle !== undefined) {
+        book.title = newTitle;
     }
-    res.json(book);
+    if (newSubtitle !== undefined) {
+        book.subtitle = newSubtitle;
+    }
+    if (newPublicationDate !== undefined) {
+        book.publicationDate = newPublicationDate;
+    }
+    if (newTags !== undefined) {
+        book.tags = newTags;
+    }
+    if (newPrimaryAuthorId !== undefined) {
+        book.primaryAuthorId = newPrimaryAuthorId;
+    }
+
+    return book;
 }
 
 export default {
