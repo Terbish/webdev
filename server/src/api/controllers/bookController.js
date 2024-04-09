@@ -34,14 +34,15 @@ export const getBookByTag = (req, res) => {
     const { tags } = req.body;
     console.log(tags);
     if (tags.length === 0) {
-        return res.status(400).json({ error: 'No tags provided' });
+      return res.status(400).json({ error: 'No tags provided' });
     }
+  
     try {
-        const booksByTag = books.filter((b) => b.tags.includes(tags));
-        res.json(booksByTag);
+      const booksByTag = books.filter((b) => tags.some((tag) => b.tags.includes(tag)));
+      res.json(booksByTag);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'An error occurred while fetching the books' });
+      console.log(error);
+      res.status(500).json({ error: 'An error occurred while fetching the books' });
     }
 }
 
@@ -70,7 +71,17 @@ export const updateBook = (req, res) => {
       newPrimaryAuthorId,
     });
     res.json(updatedBook);
-  };
+}
+
+export const removeBook = (req, res) => {
+    const { id } = req.body;
+    const book = findBookById(id);
+    if (!book) {
+        return res.status(404).json({ error: 'Book not found' });
+    }
+    books = books.filter((b) => b.id !== id);
+    res.json(book);
+}
 
 function findBookById(id) {
     return books.find((b) => b.id === parseInt(id));
