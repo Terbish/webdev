@@ -1,10 +1,11 @@
 import { findAuthorByName } from './authorController.js';
+import { removeEditionByBookId } from './editionController.js';
 
 let books = [];
 
 export const addBook = (req, res) => {
-    const { title, subtitle, publicationDate, tags, primaryAuthorId } = req.body;
-    const newBook = { title, subtitle, publicationDate, tags, primaryAuthorId, bookId: books.length + 1 };
+    const { title, subtitle, originalPublicationDate, tags, primaryAuthorId } = req.body;
+    const newBook = { title, subtitle, originalPublicationDate, tags, primaryAuthorId, bookId: books.length + 1 };
     books.push(newBook);
     res.status(201).json(newBook);
 }
@@ -56,7 +57,7 @@ export const getBookById = (req, res) => {
 }
 
 export const updateBook = (req, res) => {
-    const { id, newTitle, newSubtitle, newPublicationDate, newTags, newPrimaryAuthorId } = req.body;
+    const { id, newTitle, newSubtitle, neworiginalPublicationDate, newTags, newPrimaryAuthorId } = req.body;
     const book = findBookById(id);
   
     if (!book) {
@@ -66,7 +67,7 @@ export const updateBook = (req, res) => {
     const updatedBook = updateBookProperties(book, {
       newTitle,
       newSubtitle,
-      newPublicationDate,
+      neworiginalPublicationDate,
       newTags,
       newPrimaryAuthorId,
     });
@@ -79,8 +80,9 @@ export const removeBook = (req, res) => {
     if (!book) {
         return res.status(404).json({ error: 'Book not found' });
     }
-    books = books.filter((b) => b.id !== id);
-    res.json(book);
+    const removedBook = books.splice(books.indexOf(book), 1);
+    removeEditionByBookId(id);
+    res.json(removedBook);
 }
 
 export function findBookById(id) {
@@ -88,7 +90,7 @@ export function findBookById(id) {
 }
 
 function updateBookProperties(book, updates) {
-    const { newTitle, newSubtitle, newPublicationDate, newTags, newPrimaryAuthorId } = updates;
+    const { newTitle, newSubtitle, neworiginalPublicationDate, newTags, newPrimaryAuthorId } = updates;
 
     if (newTitle !== undefined) {
         book.title = newTitle;
@@ -96,8 +98,8 @@ function updateBookProperties(book, updates) {
     if (newSubtitle !== undefined) {
         book.subtitle = newSubtitle;
     }
-    if (newPublicationDate !== undefined) {
-        book.publicationDate = newPublicationDate;
+    if (neworiginalPublicationDate !== undefined) {
+        book.originalPublicationDate = neworiginalPublicationDate;
     }
     if (newTags !== undefined) {
         book.tags = newTags;

@@ -1,9 +1,9 @@
 import { Router } from "express";
 const router = Router();
-import { addEdition } from "../controllers/editionController.js";
+import { addEdition, listEditions, removeEdition } from "../controllers/editionController.js";
 
 router.post('/', addEdition);
-// router.get('/books/edition/', listEditions);
-// router.delete('/books/edition/', removeEdition);
+router.get('/', listEditions);
+router.delete('/', removeEdition);
 
 export default router;

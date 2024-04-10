@@ -3,39 +3,53 @@ import { expect } from "chai";
 import app from "../server.js";
 
 describe("Book Routes", () => {
-    let books = [];
-    let authors = [];
-    const author = {
-        fullName: "Charles Dickens",
-        bio: "An acclaimed novelist.",
-        birthDate: "1812-02-07",
-        primaryGenre: "fiction",
-        id: 1
+    const newBookData = {
+        title: "Sample Book",
+        subtitle: "A Sample Subtitle",
+        originalPublicationDate: "2022-01-01",
+        tags: ["sample", "book"],
+        primaryAuthorId: 1
     };
-    authors.push(author);
+    const newAuthorData = {
+        authorName: "Sample Author",
+        bio: "A Sample Bio",
+        birthDate: "2022-01-01",
+        primaryGenre: "Sample Genre",
+        authorId: 1
+    };
+    describe("POST /books", () => {
+        it("should add a new book", async () => {
+            const response = await request(app)
+                .post("/books")
+                .send(newBookData);
 
-    it("should create a new book", async () => {
-        const newBook = {
-            title: "A Tale of Two Cities",
-            subtitle: "A novel",
-            publicationDate: "1859-01-01",
-            tags: ["historical", "fiction"],
-            primaryAuthorId: 1
-        };
-        const response = await request(app).post("/books").send(newBook).expect(201);
-        expect(response.body).to.eql(newBook);
-        books.push(newBook);
+            expect(response.status).to.equal(201);
+            expect(response.body).to.deep.equal({
+                title: "Sample Book",
+                subtitle: "A Sample Subtitle",
+                originalPublicationDate: "2022-01-01",
+                tags: ["sample", "book"],
+                primaryAuthorId: 1,
+                bookId: 1
+            });
+        });
     });
-    it("should list all books", async () => {
-        const response = await request(app).get("/books").expect(200);
-        expect(response.body).to.eql(books);
+
+    describe("GET /books", () => {
+        it("should list all books", async () => {
+            const response = await request(app).get("/books");
+
+            expect(response.status).to.equal(200);
+            expect(response.body).to.deep.equal([newBookData.title]);
+        });
     });
-    it("should get books by author", async () => {
-        const author = authors[0];
-        console.log(author.fullName, author.id);
-        console.log(books.filter((b) => b.primaryAuthorId === author.id));
-        const response = await request(app).get(`/books/author/Charles%20Dickens`).expect(200);
-        const booksByAuthor = books.filter((b) => b.primaryAuthorId === author.id);
-        expect(response.body).to.eql(booksByAuthor);
+
+    describe("GET /books/authorName", () => {
+        it("should list all books by a specific author", async () => {
+            const response = await request(app).get("/books/authorName");
+
+            expect(response.status).to.equal(200);
+            expect(response.body).to.deep.equal([newBookData.primaryAuthorId]);
+        });
     });
 });
