@@ -39,7 +39,7 @@ export const getBookByTag = (req, res) => {
     }
   
     try {
-      const booksByTag = books.filter((b) => tags.some((tag) => b.tags.includes(tag)));
+    const booksByTag = books.filter((b) => tags.every((tag) => b.tags.includes(tag)));
       res.json(booksByTag);
     } catch (error) {
       console.log(error);
