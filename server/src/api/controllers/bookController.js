@@ -5,7 +5,7 @@ let books = [];
 
 export const addBook = (req, res) => {
     const { title, subtitle, originalPublicationDate, tags, primaryAuthorId } = req.body;
-    const newBook = { title, subtitle, originalPublicationDate, tags, primaryAuthorId, bookId: books.length + 1 };
+    const newBook = { title, subtitle: subtitle || '', originalPublicationDate, tags, primaryAuthorId, bookId: books.length + 1 };
     books.push(newBook);
     res.status(201).json(newBook);
 }
