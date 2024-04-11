@@ -5,10 +5,10 @@ const router = Router();
 
 router.post('/', addBook);
 router.get('/', listBooks);
-router.get('/authorName', getBookByAuthor);
-router.get('/tags', getBookByTag);
-router.get('/id', getBookById);
-router.put('/id', updateBook);
-router.delete('/id', removeBook);
+router.get('/author/:authorId', getBookByAuthor);
+router.get('/tags/:tags', getBookByTag);
+router.get('/id/:id', getBookById);
+router.put('/id/:id', updateBook);
+router.delete('/id/:id', removeBook);
 
 export default router;

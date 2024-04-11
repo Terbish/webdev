@@ -1,4 +1,3 @@
-import { findAuthorByName } from './authorController.js';
 import { removeEditionByBookId } from './editionController.js';
 
 let books = [];
@@ -17,38 +16,34 @@ export const listBooks = (req, res) => {
 }
 
 export const getBookByAuthor = (req, res) => {
-    const { authorName } = req.body;
-    const name = findAuthorByName(authorName);
-    if (!authorName) {
+    const authorId = parseInt(req.params.authorId);
+    if (!req.params.authorId) {
         return res.status(404).json({ error: 'Author not found' });
     }
     try {
-        const booksByAuthor = books.filter((b) => b.primaryAuthorId === name.authorId);
+        const booksByAuthor = books.filter((b) => b.primaryAuthorId === authorId);
         res.json(booksByAuthor);
     } catch (error) {
-        console.log(error);
         res.status(500).json({ error: 'An error occurred while fetching the books' });
     }
 }
 
 export const getBookByTag = (req, res) => {
-    const { tags } = req.body;
-    console.log(tags);
-    if (tags.length === 0) {
-      return res.status(400).json({ error: 'No tags provided' });
+    const { tags } = req.params;
+    const tagArray = tags.split(' ');
+    if (tagArray.length === 0) {
+        return res.status(400).json({ error: 'No tags provided' });
     }
-  
     try {
-    const booksByTag = books.filter((b) => tags.every((tag) => b.tags.includes(tag)));
-      res.json(booksByTag);
+        const booksByTag = books.filter((b) => tagArray.every((tag) => b.tags.includes(tag)));
+        res.json(booksByTag);
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'An error occurred while fetching the books' });
+        res.status(500).json({ error: 'An error occurred while fetching the books' });
     }
 }
 
 export const getBookById = (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
     const book = findBookById(id);
     if (!book) {
         return res.status(404).json({ error: 'Book not found' });
@@ -57,19 +52,20 @@ export const getBookById = (req, res) => {
 }
 
 export const updateBook = (req, res) => {
-    const { id, newTitle, newSubtitle, neworiginalPublicationDate, newTags, newPrimaryAuthorId } = req.body;
+    const { id } = req.params;
+    const { newTitle, newSubtitle, neworiginalPublicationDate, newTags, newPrimaryAuthorId } = req.body;
     const book = findBookById(id);
-  
+
     if (!book) {
-      return res.status(404).json({ error: 'Book not found' });
+        return res.status(404).json({ error: 'Book not found' });
     }
-  
+
     const updatedBook = updateBookProperties(book, {
-      newTitle,
-      newSubtitle,
-      neworiginalPublicationDate,
-      newTags,
-      newPrimaryAuthorId,
+        newTitle,
+        newSubtitle,
+        neworiginalPublicationDate,
+        newTags,
+        newPrimaryAuthorId,
     });
     res.json(updatedBook);
 }
