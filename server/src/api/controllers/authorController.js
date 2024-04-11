@@ -9,7 +9,7 @@ export const addAuthor = (req, res) => {
 };
 
 export const listAuthors = (req, res) => {
-  res.json(authors);
+  res.json(authors.map((a) => a.fullName));
 };
 
 export const updateAuthorBio = (req, res) => {
